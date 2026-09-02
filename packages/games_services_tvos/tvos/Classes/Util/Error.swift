@@ -1,0 +1,87 @@
+
+#if os(iOS) || os(tvOS)
+import Flutter
+#else
+import FlutterMacOS
+#endif
+
+extension Error {
+  func flutterError(code: PluginError) -> FlutterError {
+    return FlutterError(code: code.rawValue,
+                        message: self.localizedDescription,
+                        details: self.localizedDescription)
+  }
+}
+
+enum PluginError: String {
+  
+  var errorDescription: String? {
+    switch self {
+    case .failedToSendScore:
+      return "Failed to send the score"
+    case .failedToGetScore:
+      return "Failed to get the score"
+    case .failedToSendAchievement:
+      return "Failed to send the achievement"
+    case .failedToAuthenticate:
+      return "Failed to authenticate"
+    case .signInUnavailable:
+      return "Sign-in is unavailable. Game Center will not present the sign-in UI from the app, typically because it is turned off or restricted in the device's Settings, or no account is signed in. The user must sign in from the device's Game Center settings."
+    case .failedToGetPlayerProfileImage:
+      return "Failed to get player profile image"
+    case .notSupportedForThisOSVersion:
+      return "Not supported for this OS version"
+    case .leaderboardNotFound:
+      return "Leaderboard not found"
+    case .failedToSaveGame:
+      return "Failed to save game"
+    case .failedToLoadGame:
+      return "Failed to load game"
+    case .failedToGetSavedGames:
+      return "Failed to get saved games"
+    case .failedToDeleteSavedGame:
+      return "Failed to delete saved game"
+    case  .failedToLoadAchievements:
+      return "Failed to get the achievements list"
+    case .failedToResetAchievements: 
+      return "Failed to reset achievements"      
+    case .failedToLoadLeaderboardScores:
+      return "Failed to load leaderboard scores"
+    case .failedToLoadPreviousOccurrence:
+      return "Failed to load previous occurrence"
+    // tvOS only. GKLocalPlayer's saved-game category is
+    // API_UNAVAILABLE(tvos, watchos), so this is a permanent property of
+    // the platform rather than a failure worth retrying -- and the caller
+    // deserves to be told which of the two it is.
+    case .savedGamesUnavailable:
+      return "Saved games are not available on tvOS"
+    case .failedToFetchIdentityVerification:
+      return "Failed to fetch identity verification signature"
+    }
+  }
+  
+  case failedToSendScore = "failed_to_send_score"
+  case failedToGetScore = "failed_to_get_score"
+  case failedToSendAchievement = "failed_to_send_achievement"
+  case failedToAuthenticate = "failed_to_authenticate"
+  case signInUnavailable = "sign_in_unavailable"
+  case failedToGetPlayerProfileImage = "failed_to_get_player_profile_image"
+  case failedToSaveGame = "failed_to_save_game"
+  case failedToLoadGame = "failed_to_load_game"
+  case notSupportedForThisOSVersion = "not_supported_for_this_os_version"
+  case leaderboardNotFound = "leaderboard_not_found"
+  case failedToGetSavedGames = "failed_to_get_saved_games"
+  case failedToDeleteSavedGame = "failed_to_delete_saved_game"
+  case failedToLoadAchievements = "failed_to_load_achievements"
+  case failedToResetAchievements = "failed_to_reset_achievements"
+  case failedToLoadLeaderboardScores = "failed_to_load_leaderboard_scores"
+  case failedToLoadPreviousOccurrence = "failed_to_load_previous_occurrence"
+  case failedToFetchIdentityVerification = "failed_to_fetch_identity_verification"
+  case savedGamesUnavailable = "saved_games_unavailable"
+
+  func flutterError() -> FlutterError {
+    return FlutterError(code: rawValue,
+                        message: errorDescription,
+                        details: errorDescription)
+  }
+}
