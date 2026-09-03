@@ -167,10 +167,21 @@ Verified instead in a host app (an existing tvOS game):
       already `#if`-guarded by the porter, correctly)
 - [x] Builds green in a host app **with the plugin actually registered**
 - [x] `CHANGELOG.md` written for 0.0.1
-- [ ] Authenticated round trip on a physical Apple TV signed into a real
-      Game Center account — submit a score, read entries back. The
-      simulator has no account, and the watchOS sibling authenticated
-      cleanly and still could not read entries on hardware.
+- [x] Authenticated round trip on a physical Apple TV (tvOS 26.6) signed
+      into a real Game Center account: `isSignedIn` true, the alias and
+      `gamePlayerID` both resolve, `submitScore` returns `Success`,
+      `loadLeaderboardScores` returns entries, and `getPlayerScore` reads
+      back the player's existing best rather than the probe's own write.
+      The saved-game guards return `saved_games_unavailable` on hardware
+      as they do on the simulator.
+
+      This is the check the watchOS sibling failed: it authenticated
+      cleanly and still could not read, because its local player had no
+      resolved alias. tvOS has `gamePlayerID` / `teamPlayerID` — both
+      `API_UNAVAILABLE(watchos)` — and does not reproduce it.
+
+      Scores went to Game Center's **sandbox**, which is what a
+      development-signed build uses.
 - [ ] Integration tests under `example/integration_test/`. Deliberately
       not written yet: per the caveat above the example cannot register
       the plugin, so every test would fail with `MissingPluginException`

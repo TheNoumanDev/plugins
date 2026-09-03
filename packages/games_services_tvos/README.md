@@ -4,10 +4,9 @@ tvOS implementation of [`games_services`](https://pub.dev/packages/games_service
 for [flutter-tvos](https://github.com/fluttertv/flutter-tvos).
 
 > Hand-finished from `flutter-tvos plugin port`.
-> **Verified:** registers on tvOS, and `signIn()` presents Apple's native
-> Game Center screen on an Apple TV, with the result returning to Dart.
-> An **authenticated** round trip — submitting a score and reading entries
-> back — has not been confirmed; see [Status](#status).
+> **Verified on a physical Apple TV** signed into Game Center: authentication
+> resolves a named player, a score submits, and the leaderboard reads back.
+> See [Status](#status).
 
 ## Usage
 
@@ -72,17 +71,29 @@ the view-controller presentation all work. Declining it returns
 correct answer and not the `MissingPluginException` an unregistered
 plugin would give.
 
-Every handler has also been called from Dart and observed answering.
-`submitScore` and `loadLeaderboardScores` come back with **GameKit's own**
-"local player has not been authenticated" — under distinct error codes,
-so the dispatch reaches separate handlers — which shows those paths run
-and return, not merely that they compile.
+On a **physical Apple TV** (tvOS 26.6) signed into Game Center, every
+call was driven from Dart:
 
-The simulator has no real Game Center account, so what is **not** yet
-confirmed is an *authenticated* round trip: submitting a score and
-reading entries back. The errors above are GameKit declining an
-unauthenticated player, which is the correct response to declining
-sign-in and is not evidence that a successful call would work.
+| call | result |
+|---|---|
+| `GameAuth.isSignedIn` | `true` |
+| `Player.getPlayerName()` | the account's real alias |
+| `Player.getPlayerID()` | a `gamePlayerID` |
+| `SaveGame.*` | `saved_games_unavailable` |
+| `GamesServices.submitScore` | `Success` |
+| `Leaderboards.loadLeaderboardScores` | entry data |
+| `Player.getPlayerScore` | the player's existing best |
+
+The first two rows are the ones worth dwelling on. The watchOS sibling
+authenticates and then *cannot read*: `GKLocalPlayer` reports an
+authenticated player whose alias never resolves, and GameKit refuses
+every read that follows. tvOS does not reproduce it — the alias resolves
+to a real name and a real `gamePlayerID`, which is precisely the API
+declared `API_UNAVAILABLE(watchos)` and whose absence forced that plugin
+to identify the local player by leaderboard rank instead.
+
+A development-signed build talks to Game Center's **sandbox**, so the
+scores above are sandbox scores, not the live board.
 
 This distinction is deliberate rather than pedantic. The sibling
 `games_services_watchos` authenticated cleanly and still could not read
