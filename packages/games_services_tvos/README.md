@@ -59,7 +59,8 @@ iOS implementation unchanged:
   The four methods still answer the channel, returning the error code
   `saved_games_unavailable`. That is deliberate: a method the native side
   simply ignores surfaces in Dart as a `MissingPluginException`, which
-  reads like a broken installation rather than an absent feature.
+  reads like a broken installation rather than an absent feature. All
+  four have been called on an Apple TV and observed returning it.
 
 ## Status
 
@@ -71,9 +72,17 @@ the view-controller presentation all work. Declining it returns
 correct answer and not the `MissingPluginException` an unregistered
 plugin would give.
 
+Every handler has also been called from Dart and observed answering.
+`submitScore` and `loadLeaderboardScores` come back with **GameKit's own**
+"local player has not been authenticated" — under distinct error codes,
+so the dispatch reaches separate handlers — which shows those paths run
+and return, not merely that they compile.
+
 The simulator has no real Game Center account, so what is **not** yet
-confirmed is an *authenticated* round trip on a physical Apple TV:
-submitting a score and reading entries back.
+confirmed is an *authenticated* round trip: submitting a score and
+reading entries back. The errors above are GameKit declining an
+unauthenticated player, which is the correct response to declining
+sign-in and is not evidence that a successful call would work.
 
 This distinction is deliberate rather than pedantic. The sibling
 `games_services_watchos` authenticated cleanly and still could not read

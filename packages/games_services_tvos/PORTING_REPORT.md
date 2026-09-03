@@ -138,6 +138,27 @@ Verified instead in a host app (an existing tvOS game):
   been authenticated")` — a structured error from the plugin, which is
   the correct answer to declining, and categorically not the
   `MissingPluginException` an unregistered plugin would have produced.
+- **every handler in the dispatch was called and answered.** Driving all
+  seven from Dart on the simulator, with sign-in declined:
+
+  | call | result |
+  |---|---|
+  | `saveGame`, `loadGame`, `getSavedGames`, `deleteGame` | `saved_games_unavailable` |
+  | `submitScore` | `failed_to_send_score` + *"local player has not been authenticated"* |
+  | `loadLeaderboardScores` | `failed_to_load_leaderboard_scores` + the same |
+  | `isSignedIn` | `false` |
+
+  The first row is this port's own code, executed rather than merely
+  compiled — all four `#if os(tvOS)` branches fire and return a
+  structured error instead of hanging. The next two carry **GameKit's**
+  message, not ours, so those handlers genuinely reach GameKit and come
+  back; and they return *different* error codes, so the dispatch routes
+  to distinct handlers rather than one fallback.
+
+  What this still does not show is a *successful* authenticated call.
+  The errors are GameKit refusing an unauthenticated player, which is
+  correct behaviour for a declined sign-in, not evidence a submit or a
+  read would succeed.
 
 ## Checklist
 
