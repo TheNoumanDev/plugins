@@ -61,6 +61,54 @@ iOS implementation unchanged:
   reads like a broken installation rather than an absent feature. All
   four have been called on an Apple TV and observed returning it.
 
+## Using this with `games_services` 4.x
+
+The Swift here is ported from `games_services` **5.3.0** and implements
+5.x's behaviour, including one difference that will silently cost you a
+feature if you are still on 4.x.
+
+**`signIn()` resolves with a message on success, not `null`.**
+
+| | success | failure |
+|---|---|---|
+| 4.x native (iOS, macOS) | `null` | throws `PlatformException` |
+| **5.x native, and this package** | `"Player authenticated successfully"` | throws `PlatformException` |
+
+App code written against 4.x commonly reads that as
+`final error = await GameAuth.signIn(); if (error == null) { ... }` —
+which on Apple TV treats a *successful* sign-in as a failure. Nothing
+errors, nothing logs; the Game Center feature simply never switches on,
+while every call behind it works perfectly.
+
+Failure arrives as a **thrown** `PlatformException` on both iOS and
+tvOS, so the reliable test is whether the call completed:
+
+```dart
+try {
+  await GameAuth.signIn();
+  // Reaching here means authenticated. The String is informational --
+  // null on 4.x, a message on 5.x -- and is not a success signal.
+  setState(() => gameCenterReady = true);
+} on PlatformException {
+  // Genuinely not signed in.
+}
+```
+
+Be aware that `games_services_watchos`, if you also target the wrist,
+inverts this: it reports failure by *returning* a message rather than
+throwing, so there `null` really does mean success. Three
+implementations, three conventions.
+
+This is the reason the dependency range is
+`games_services_platform_interface >=4.1.1 <6.0.0` rather than `^5.3.0`.
+The wire protocol is compatible in both directions — same channel, and
+5.3.0's method set is a superset of 4.1.1's with every argument key
+unchanged — so pinning 5.x would force an upgrade on apps that cannot
+take one (`games_services_watchos` pins `^4.1.1`, and a narrower range
+here would stop the wrist and the TV coexisting at all). The return
+value is the one place the two versions differ in a way app code can
+notice, so it is documented rather than hidden behind a constraint.
+
 ## Status
 
 On the Apple TV simulator the plugin registers, `GameAuth.signIn()`

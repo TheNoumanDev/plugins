@@ -91,6 +91,21 @@ that forced compromises in the watchOS sibling are all present on tvOS:
    behaviour. Without this an app could not use the wrist and the TV
    together, since `games_services_watchos` pins `^4.1.1`.
 
+   **That check was incomplete, and the gap was found the hard way.** It
+   covered the channel name, the method set and the argument keys — but
+   not *return values*, and that is exactly where 4.x and 5.x differ:
+   4.x's native side resolves a successful `signIn()` with `nil`, 5.x's
+   with `"Player authenticated successfully"`. An app on 4.x that reads
+   a non-null return as an error therefore treats a successful tvOS
+   sign-in as a failure, and silently loses the feature while every call
+   behind it works. That is not hypothetical — it hid the leaderboard in
+   the app this package was verified against.
+
+   The range stays as it is, because the difference is observable rather
+   than breaking and pinning `^5.3.0` would stop the wrist and the TV
+   coexisting. It is documented under "Using this with `games_services`
+   4.x" in `README.md`, with the pattern that works on every version.
+
 3. **Lowered the deployment target** from the generated `tvos 15.0` to
    `14.0`, matching upstream's own iOS floor. Everything newer in the
    sources is `#available`-guarded at runtime, so 15.0 excluded devices
