@@ -1,23 +1,9 @@
 ## 0.0.3
 
-* Regenerate the native Pigeon sources against the 14-element `CoreFirebaseOptions` payload and
-  widen the `firebase_core_platform_interface` pin to `^8.1.0`.
-
-  8.1.0 dropped `recaptchaSiteKey`, shortening the payload from 15 elements to 14. The generated
-  code decoded index 14 through a bare `NSArray` subscript, so on 8.1.x
-  `Firebase.initializeApp(options: ...)` raised `NSRangeException` before any Dart ran. 0.0.2
-  avoided that by pinning to the 15-element window; this release regenerates instead.
-
-  Sources come from `firebase_core` 4.13.0 — the last release whose iOS implementation is still
-  Objective-C (4.14.0 rewrote it in Swift), and the first on the 14-element payload. The delta
-  against the previous files is exclusively `recaptchaSiteKey`.
-
-  The pin is a caret, matching what `firebase_core` declares for itself. Arity moved only during
-  one add/remove cycle — 7.1.0 introduced `recaptchaSiteKey` for reCAPTCHA support that was
-  "gradually rolling out", and 8.1.0 withdrew it when that moved to the provider API — across 23
-  published minor lines.
-
-  **Breaking:** now requires `firebase_core >= 4.13.0`.
+* Regenerate the native Pigeon sources from `firebase_core` 4.13.0, which decode the
+  14-element `CoreFirebaseOptions` payload that `firebase_core_platform_interface` 8.1.0
+  settled on. 0.0.2 pinned to the 15-element window instead.
+* Widen `firebase_core_platform_interface` to `^8.1.0`; require `firebase_core` `^4.13.0`.
 
 ## 0.0.2
 
