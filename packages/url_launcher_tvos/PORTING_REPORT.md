@@ -54,11 +54,21 @@ This package's Dart runs **only on tvOS**, so it states tvOS behaviour directly
 - `supportsMode(inAppBrowserView` / `inAppWebView)` → `false` (was `true`);
   `supportsCloseForMode(...)` → `false` (nothing to close).
 - **`launchUrl` falls back to an external launch for _every_ mode** (external,
-  `platformDefault`, in-app), matching the browser-less macOS/Windows/Linux
-  impls. This keeps the deprecated `launch('https://…')` — which infers an in-app
-  mode from the URL scheme — from throwing: it launches externally and an
-  unclaimed URL returns `false`. The in-app host methods stay registered for
-  conformance but are unused on tvOS.
+  `platformDefault`, in-app) — the same fallback the browser-less
+  macOS/Windows/Linux impls make. The _supported set_ is not the same as theirs:
+  they report `supportsMode` `true` only for `platformDefault` and
+  `externalApplication`, whereas this package also reports `true` for
+  `externalNonBrowserApplication`, because it really does forward
+  `universalLinksOnly` to the host. The fallback keeps the deprecated
+  `launch('https://…')` — which infers an in-app mode from the URL scheme — from
+  throwing: it launches externally and an unclaimed URL returns `false`. The
+  in-app host methods stay registered for conformance but are unused on tvOS.
+- The deprecated `launch()` override tests `universalLinksOnly` **before**
+  `useSafariVC`, the reverse of iOS. The shim infers
+  `useSafariVC = forceSafariVC ?? isWebURL`, so an iOS-shaped order leaves the
+  `universalLinksOnly` branch unreachable for web URLs and forwards the wrong
+  flag; iOS gets away with it because its SafariVC branch honours the request
+  in-app, and tvOS has no such branch.
 
 ## Packaging
 

@@ -5,5 +5,7 @@
   `UIApplication.open` / `canOpenURL`. The in-app browser modes
   (`inAppBrowserView` / `inAppWebView`) are unsupported on tvOS
   (no SafariServices): `supportsMode` reports `false`, and a launch requested
-  with an in-app mode falls back to an external launch (matching the
-  macOS/Windows/Linux implementations) rather than throwing.
+  with an in-app mode falls back to an external launch (the same fallback the
+  browser-less macOS/Windows/Linux implementations make) rather than throwing.
+  Unlike those three, `supportsMode` also reports `true` for
+  `externalNonBrowserApplication`, since `universalLinksOnly` is forwarded to the host.

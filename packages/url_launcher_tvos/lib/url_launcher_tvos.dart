@@ -13,9 +13,11 @@ import 'src/messages.g.dart';
 ///
 /// tvOS has no web browser (no SafariServices/WebKit), so the in-app browser
 /// modes are unsupported: [supportsMode] reports `false` for them and every
-/// launch falls back to an external launch (`UIApplication.open`), matching the
-/// other browser-less implementations (macOS/Windows/Linux). See
-/// `PORTING_REPORT.md`.
+/// launch falls back to an external launch (`UIApplication.open`) — the same
+/// fallback the other browser-less implementations (macOS/Windows/Linux) make.
+/// The supported set is wider than theirs, though: this implementation also
+/// reports `true` for [PreferredLaunchMode.externalNonBrowserApplication],
+/// since it forwards `universalLinksOnly` to the host. See `PORTING_REPORT.md`.
 ///
 /// Note: [canLaunch] maps to `UIApplication.canOpenURL`, which on tvOS can
 /// return `true` for an `http(s)` URL even when no installed app will actually
@@ -61,11 +63,18 @@ class UrlLauncherTvos extends UrlLauncherPlatform {
     required Map<String, String> headers,
     String? webOnlyWindowName,
   }) async {
+    // Deliberately ordered differently from the iOS implementation, which tests
+    // `useSafariVC` first. `url_launcher`'s deprecated shim infers
+    // `useSafariVC = forceSafariVC ?? isWebURL`, so for any web URL an
+    // iOS-shaped order would make the `universalLinksOnly` branch unreachable
+    // and silently drop the caller's flag. On iOS that is harmless because the
+    // SafariVC branch honours the request in-app; tvOS has no such branch, so
+    // the explicit flag must win over the inferred one.
     final PreferredLaunchMode mode;
-    if (useSafariVC) {
-      mode = PreferredLaunchMode.inAppBrowserView;
-    } else if (universalLinksOnly) {
+    if (universalLinksOnly) {
       mode = PreferredLaunchMode.externalNonBrowserApplication;
+    } else if (useSafariVC) {
+      mode = PreferredLaunchMode.inAppBrowserView;
     } else {
       mode = PreferredLaunchMode.externalApplication;
     }
@@ -85,9 +94,9 @@ class UrlLauncherTvos extends UrlLauncherPlatform {
   @override
   Future<bool> launchUrl(String url, LaunchOptions options) async {
     // tvOS has no in-app browser: every mode falls back to an external launch,
-    // matching the browser-less macOS/Windows/Linux implementations (the
-    // platform interface encourages falling back over failing). An unclaimed URL
-    // returns false rather than throwing.
+    // the same fallback the browser-less macOS/Windows/Linux implementations
+    // make (the platform interface encourages falling back over failing). An
+    // unclaimed URL returns false rather than throwing.
     return _mapLaunchResult(
       await _hostApi.launchUrl(
         url,

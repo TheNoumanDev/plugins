@@ -18,7 +18,10 @@ dependencies:
     url_launcher_tvos: ^0.0.1
 ```
 
-Then use the `url_launcher` API exactly as on iOS.
+Then use the `url_launcher` API as usual — but not every call behaves as it does
+on iOS. There is no browser on tvOS, so the in-app browser modes fall back to an
+external launch and `canLaunchUrl` can return `true` for a web URL nothing will
+open. See the table below before porting an iOS app over.
 
 ## What works on tvOS — and what doesn't
 
@@ -29,7 +32,7 @@ implementation supports only the _external_ launch surface:
 | ---------------------------------------------------------------- | ------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `canLaunchUrl`                                                   | ✅            | maps to `UIApplication.canOpenURL`                                                                                                                                                                    |
 | `launchUrl` (external / universal link / app scheme)             | ✅            | maps to `UIApplication.open`; opens another installed app                                                                                                                                             |
-| `launchUrl` in-app browser (`inAppBrowserView` / `inAppWebView`) | ⚠️ falls back | no `SFSafariViewController` on tvOS — `supportsMode` returns `false`, and a launch requested with an in-app mode **falls back to an external launch** (like macOS/Windows/Linux) rather than throwing |
+| `launchUrl` in-app browser (`inAppBrowserView` / `inAppWebView`) | ⚠️ falls back | no `SFSafariViewController` on tvOS — `supportsMode` returns `false`, and a launch requested with an in-app mode **falls back to an external launch** (the same fallback macOS/Windows/Linux make) rather than throwing |
 | `closeWebView`                                                   | ❌ (no-op)    | nothing to close — there is no in-app browser                                                                                                                                                         |
 
 Because there is no browser, a plain `http(s)` URL only opens if another
