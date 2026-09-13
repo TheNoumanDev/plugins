@@ -2,7 +2,7 @@ name: firebase_core_tvos
 description: >-
   tvOS (Apple TV) implementation of the firebase_core Flutter plugin, enabling
   Firebase initialization on Apple TV via the flutter-tvos toolchain.
-version: 0.0.2
+version: 0.0.3
 homepage: https://fluttertv.dev
 repository: https://github.com/fluttertv/plugins/tree/main/packages/firebase_core_tvos
 issue_tracker: https://github.com/fluttertv/plugins/issues
@@ -16,15 +16,11 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  firebase_core: ^4.11.0
-  # Pinned to the window where CoreFirebaseOptions is a 15-element Pigeon
-  # payload, which is what this package's generated native side decodes
-  # (tvos/Classes/messages.g.m reads index 14). 7.0.x and 8.1.0 send 14
-  # elements — 8.1.0 dropped `recaptchaSiteKey` — so either end of this range
-  # makes Firebase.initializeApp(options: ...) read past the end of the list.
-  # Only 7.1.0 and 8.0.0 are compatible. Widening this requires regenerating
-  # the native Pigeon sources first.
-  firebase_core_platform_interface: ">=7.1.0 <8.1.0"
+  # First release targeting the 14-element payload; older ones expect 15.
+  firebase_core: ^4.13.0
+  # Matches what firebase_core itself declares; messages.g.m decodes the 14-element
+  # CoreFirebaseOptions payload 8.1.0 settled on.
+  firebase_core_platform_interface: ^8.1.0
 
 dev_dependencies:
   flutter_lints: ^4.0.0

@@ -6,7 +6,7 @@
 #
 Pod::Spec.new do |s|
   s.name             = 'firebase_core_tvos'
-  s.version          = '0.0.2'
+  s.version          = '0.0.3'
   s.summary          = 'tvOS implementation of firebase_core.'
   s.description      = <<-DESC
 tvOS implementation of firebase_core, the federated platform
