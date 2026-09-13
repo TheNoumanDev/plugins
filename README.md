@@ -44,6 +44,7 @@ package's `README.md` and `PORTING_REPORT.md`.
 | [`cloud_functions_tvos`](packages/cloud_functions_tvos) [![pub](https://img.shields.io/pub/v/cloud_functions_tvos.svg)](https://pub.dev/packages/cloud_functions_tvos) | [`cloud_functions`](https://pub.dev/packages/cloud_functions) |
 | [`firebase_analytics_tvos`](packages/firebase_analytics_tvos) [![pub](https://img.shields.io/pub/v/firebase_analytics_tvos.svg)](https://pub.dev/packages/firebase_analytics_tvos) | [`firebase_analytics`](https://pub.dev/packages/firebase_analytics) |
 | [`firebase_crashlytics_tvos`](packages/firebase_crashlytics_tvos) [![pub](https://img.shields.io/pub/v/firebase_crashlytics_tvos.svg)](https://pub.dev/packages/firebase_crashlytics_tvos) | [`firebase_crashlytics`](https://pub.dev/packages/firebase_crashlytics) |
+| [`url_launcher_tvos`](packages/url_launcher_tvos) [![pub](https://img.shields.io/pub/v/url_launcher_tvos.svg)](https://pub.dev/packages/url_launcher_tvos) | [`url_launcher`](https://pub.dev/packages/url_launcher) |
 
 ### Evaluated but not provided
 
@@ -53,7 +54,6 @@ misleading:
 
 | Plugin | Why not on tvOS |
 |---|---|
-| [`url_launcher`](https://pub.dev/packages/url_launcher) | No Safari / arbitrary URL or app launching on tvOS |
 | [`google_sign_in`](https://pub.dev/packages/google_sign_in) | No GoogleSignIn tvOS SDK; tvOS uses a different device-pairing flow |
 | [`geolocator`](https://pub.dev/packages/geolocator) | No location services on Apple TV |
 | [`permission_handler`](https://pub.dev/packages/permission_handler) | tvOS lacks the permission surfaces (location, camera, photos, …) |

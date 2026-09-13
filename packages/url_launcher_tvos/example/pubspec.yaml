@@ -1,0 +1,21 @@
+name: url_launcher_example
+description: Demonstrates how to use the url_launcher plugin.
+publish_to: none
+
+environment:
+  sdk: ^3.6.0
+  flutter: ">=3.27.0"
+
+dependencies:
+  url_launcher: ^6.3.2
+  url_launcher_tvos:
+    path: ../
+  flutter:
+    sdk: flutter
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+flutter:
+  uses-material-design: true
