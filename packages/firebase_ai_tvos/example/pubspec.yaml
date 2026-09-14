@@ -7,9 +7,7 @@ environment:
   flutter: '>=3.27.0'
 
 dependencies:
-  # Pinned to the 4.11.x train (firebase_core_platform_interface 7.1.0) that the
-  # Firebase _tvos family ships on; newer firebase_core drifts to pi 8.1 and
-  # mismatches firebase_core_tvos's native Pigeon.
+  # Exact pins: firebase_core and firebase_core_tvos must move together.
   firebase_ai: 3.13.1
   firebase_ai_tvos:
     path: ../

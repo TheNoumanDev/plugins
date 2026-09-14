@@ -7,11 +7,7 @@ environment:
   flutter: '>=3.27.0'
 
 dependencies:
-  # Pinned to the train the published _tvos packages were built from
-  # (firebase_core 4.11.0 -> firebase_core_platform_interface 7.1.0, whose
-  # FirebaseOptions has 15 fields incl. recaptchaSiteKey, matching the native
-  # Pigeon in firebase_core_tvos). No patch, no plist needed: Dart sends 15
-  # fields, native reads 15. This is the same train flutter_pca will bump to.
+  # Exact pins: firebase_core and firebase_core_tvos must move together.
   firebase_core: 4.11.0
   firebase_analytics: 12.4.3
   firebase_analytics_tvos:

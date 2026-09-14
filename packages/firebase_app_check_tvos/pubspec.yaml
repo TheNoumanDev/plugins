@@ -2,7 +2,7 @@ name: firebase_app_check_tvos
 description: >-
   tvOS (Apple TV) implementation of the firebase_app_check Flutter plugin,
   providing Firebase App Check on Apple TV (App Attest / DeviceCheck).
-version: 0.0.1
+version: 0.0.2
 homepage: https://fluttertv.dev
 repository: https://github.com/fluttertv/plugins/tree/main/packages/firebase_app_check_tvos
 issue_tracker: https://github.com/fluttertv/plugins/issues
@@ -16,10 +16,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  # Pinned below 0.4.6: that release moves the platform-interface pigeon
-  # contract (new getTokenResult channel; activate() gains a 5th
-  # recaptchaSiteKey arg) which the generated Swift here does not cover.
-  firebase_app_check: ">=0.4.5 <0.4.6"
+  firebase_app_check: ">=0.4.7 <0.4.8"
   # Transitive Dart dependency so the app's dependency graph includes
   # firebase_core_tvos — plugin discovery (tvos_plugins.dart) only adds a
   # package's native pod to the generated Podfile if it's reachable here,

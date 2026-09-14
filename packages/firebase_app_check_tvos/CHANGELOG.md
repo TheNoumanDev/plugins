@@ -1,3 +1,10 @@
+## 0.0.2
+
+* Regenerated the Pigeon messages against `firebase_app_check` 0.4.7: `activate()`
+  takes a 5th `recaptchaSiteKey` argument and the `getTokenResult` channel is
+  implemented.
+* Requires `firebase_app_check` `>=0.4.7 <0.4.8`.
+
 ## 0.0.1
 
 * Initial tvOS (Apple TV) implementation of `firebase_app_check`, ported from

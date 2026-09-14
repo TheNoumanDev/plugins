@@ -7,11 +7,9 @@ environment:
   flutter: '>=3.27.0'
 
 dependencies:
-  # Pinned to the train the published _tvos packages ship on (firebase_core
-  # 4.11.x -> firebase_core_platform_interface 7.1.0). Keeps the native Pigeon
-  # ABI in sync with firebase_core_tvos.
-  firebase_core: 4.11.0
-  firebase_app_check: 0.4.5
+  # Exact pins: firebase_core and firebase_core_tvos must move together.
+  firebase_core: 4.14.0
+  firebase_app_check: 0.4.7
   firebase_app_check_tvos:
     path: ../
   firebase_core_tvos: ^0.0.1
