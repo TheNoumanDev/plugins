@@ -317,7 +317,8 @@ class FlutterAppCheckProviderFactory: NSObject, AppCheckProviderFactory {
       wrapper.configure(
         app: app,
         providerName: "deviceCheck",
-        debugToken: nil
+        debugToken: nil,
+        recaptchaSiteKey: nil
       )
       providers[app.name] = wrapper
     }
