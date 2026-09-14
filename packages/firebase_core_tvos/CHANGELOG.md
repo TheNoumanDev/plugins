@@ -1,3 +1,10 @@
+## 0.0.3
+
+* Regenerate the native Pigeon sources from `firebase_core` 4.13.0, which decode the
+  14-element `CoreFirebaseOptions` payload that `firebase_core_platform_interface` 8.1.0
+  settled on. 0.0.2 pinned to the 15-element window instead.
+* Widen `firebase_core_platform_interface` to `^8.1.0`; require `firebase_core` `^4.13.0`.
+
 ## 0.0.2
 
 * Constrain `firebase_core_platform_interface` to `>=7.1.0 <8.1.0`.
