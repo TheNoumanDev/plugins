@@ -3,7 +3,11 @@
 * Regenerated the Pigeon messages against `firebase_app_check` 0.4.7: `activate()`
   takes a 5th `recaptchaSiteKey` argument and the `getTokenResult` channel is
   implemented.
-* Requires `firebase_app_check` `>=0.4.7 <0.4.8`.
+* Fixed `appAttestWithDeviceCheckFallback` never falling back: it now checks
+  `DCAppAttestService.shared.isSupported` rather than the OS version alone,
+  mirroring upstream's fix in 0.4.7 (flutterfire#18568).
+* Requires `firebase_app_check` `>=0.4.7 <0.4.8` and `firebase_core_tvos`
+  `^0.0.3` (the `firebase_core_platform_interface` 8.1.1 train).
 
 ## 0.0.1
 

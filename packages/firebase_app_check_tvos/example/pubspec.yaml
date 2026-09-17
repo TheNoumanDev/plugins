@@ -7,12 +7,13 @@ environment:
   flutter: '>=3.27.0'
 
 dependencies:
-  # Exact pins: firebase_core and firebase_core_tvos must move together.
+  # firebase_core is pinned exact and firebase_core_tvos floored to match:
+  # 0.4.7 needs pi ^8.1.1 (the 4.14.x train), which only core_tvos 0.0.3 accepts.
   firebase_core: 4.14.0
   firebase_app_check: 0.4.7
   firebase_app_check_tvos:
     path: ../
-  firebase_core_tvos: ^0.0.1
+  firebase_core_tvos: ^0.0.3
   flutter:
     sdk: flutter
 

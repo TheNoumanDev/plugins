@@ -7,7 +7,8 @@ environment:
   flutter: '>=3.27.0'
 
 dependencies:
-  # Exact pins: firebase_core and firebase_core_tvos must move together.
+  # firebase_core is pinned exact; its train picks the matching firebase_core_tvos
+  # (4.11.x -> pi 7.1.0 -> 0.0.2); floating it breaks the native Pigeon ABI.
   firebase_ai: 3.13.1
   firebase_ai_tvos:
     path: ../

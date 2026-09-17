@@ -22,7 +22,13 @@ dependencies:
   # package's native pod to the generated Podfile if it's reachable here,
   # which the podspec's `s.dependency 'firebase_core_tvos'` then resolves
   # instead of failing over to upstream's iOS-only firebase_core pod.
-  firebase_core_tvos: ^0.0.1
+  #
+  # Floored at 0.0.3, not ^0.0.1: firebase_app_check 0.4.7 requires
+  # firebase_core_platform_interface ^8.1.1, which 0.0.2 excludes by its own
+  # constraint but 0.0.1 does not constrain at all. Without this floor pub can
+  # legally pick 0.0.1, whose native Pigeon expects the pre-8.1 FirebaseOptions
+  # payload — a crash at launch instead of a solver error.
+  firebase_core_tvos: ^0.0.3
 
 dev_dependencies:
   flutter_lints: ^4.0.0

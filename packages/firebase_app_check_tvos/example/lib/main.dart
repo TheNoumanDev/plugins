@@ -39,6 +39,11 @@ class _AppCheckHomePageState extends State<AppCheckHomePage> {
   String _status = 'Ready.';
   String _token = '(none yet)';
 
+  /// A token is ~700 chars of JWT; show enough to tell a real one from a stub.
+  static String _describe(String? token) => token == null
+      ? '(null)'
+      : '${token.substring(0, token.length.clamp(0, 24))}… (${token.length} chars)';
+
   Future<void> _run(String label, Future<void> Function() action) async {
     try {
       await action();
@@ -77,15 +82,28 @@ class _AppCheckHomePageState extends State<AppCheckHomePage> {
                   child: const Text('activate (DeviceCheck)'),
                 ),
                 ElevatedButton(
+                  onPressed: () => _run('activate (Debug)', () async {
+                    // The only provider that can mint a token on the simulator:
+                    // App Attest and DeviceCheck both need real hardware.
+                    await _appCheck.activate(
+                      providerApple: const AppleDebugProvider(),
+                    );
+                  }),
+                  child: const Text('activate (Debug)'),
+                ),
+                ElevatedButton(
                   onPressed: () => _run('getToken', () async {
                     final token = await _appCheck.getToken();
-                    setState(() {
-                      _token = token == null
-                          ? '(null)'
-                          : '${token.substring(0, token.length.clamp(0, 24))}… (${token.length} chars)';
-                    });
+                    setState(() => _token = _describe(token));
                   }),
                   child: const Text('get App Check token'),
+                ),
+                ElevatedButton(
+                  onPressed: () => _run('getLimitedUseToken', () async {
+                    final token = await _appCheck.getLimitedUseToken();
+                    setState(() => _token = _describe(token));
+                  }),
+                  child: const Text('get limited-use token'),
                 ),
               ],
             ),
