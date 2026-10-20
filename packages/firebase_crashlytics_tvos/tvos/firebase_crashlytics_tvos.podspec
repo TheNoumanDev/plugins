@@ -6,7 +6,7 @@
 #
 Pod::Spec.new do |s|
   s.name             = 'firebase_crashlytics_tvos'
-  s.version          = '0.0.1'
+  s.version          = '0.0.2'
   s.summary          = 'tvOS implementation of firebase_crashlytics.'
   s.description      = <<-DESC
 tvOS implementation of firebase_crashlytics, the federated platform
@@ -21,7 +21,7 @@ package that ships native code targeting Apple tvOS.
   # Firebase/Crashlytics 12.x requires tvOS 15.0+ — bumped from the porter's
   # generic 13.0 default to satisfy that dependency.
   s.platform         = :tvos, '15.0'
-  s.swift_version    = '5.0'
+  s.swift_version    = '5.5' # upstream 5.3.0's value
 
   # IMPORTANT: this podspec must not depend on the Flutter CocoaPod. That
   # pod does not declare tvOS support, so adding a dependency on it breaks
@@ -32,20 +32,15 @@ package that ships native code targeting Apple tvOS.
     'OTHER_SWIFT_FLAGS'      => '$(inherited) -DTARGET_OS_TV',
   }
 
-  # FLTFirebaseCrashlyticsPlugin.m reads @LIBRARY_NAME / @LIBRARY_VERSION as
-  # preprocessor token-pasted string literals (same as upstream
-  # firebase_crashlytics's podspec) — without these the file fails to compile
-  # with "unexpected '@' in program".
-  s.pod_target_xcconfig = {
-    'DEFINES_MODULE' => 'YES',
-    'GCC_PREPROCESSOR_DEFINITIONS' =>
-      '$(inherited) LIBRARY_VERSION=\"0.0.1\" LIBRARY_NAME=\"flutter-fire-cls-tvos\"',
-  }
+  # Lets the Swift plugin see the ObjC helper headers (upstream uses a
+  # separate SPM target for them).
+  s.pod_target_xcconfig = { 'DEFINES_MODULE' => 'YES' }
 
-  # The ported Classes/ call into FIRCrashlytics (Firebase/Crashlytics) and into
+  # The ported Classes/ call into Crashlytics (Firebase/Crashlytics) and into
   # our own firebase_core_tvos pod, not upstream's "firebase_core" pod — that
   # pod's own podspec declares only `s.platform = :ios`, so depending on it
   # directly would make `pod install` fail to find a tvOS-compatible spec.
+  # 12.15 matches firebase_core_tvos (upstream 5.3.0 uses 12.18).
   s.dependency 'Firebase/Crashlytics', '~> 12.15.0'
   s.dependency 'firebase_core_tvos'
   s.static_framework = true

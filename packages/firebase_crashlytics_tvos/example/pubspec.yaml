@@ -8,12 +8,12 @@ environment:
 
 dependencies:
   # firebase_core is pinned exact; its train picks the matching firebase_core_tvos
-  # (4.11.x -> pi 7.1.0 -> 0.0.2); floating it breaks the native Pigeon ABI.
-  firebase_core: 4.11.0
-  firebase_crashlytics: 5.2.4
+  # (4.14.x -> pi 8.1.1 -> 0.0.3); floating it breaks the native Pigeon ABI.
+  firebase_core: 4.14.0
+  firebase_crashlytics: 5.3.0
   firebase_crashlytics_tvos:
     path: ../
-  firebase_core_tvos: ^0.0.1
+  firebase_core_tvos: ^0.0.3
   flutter:
     sdk: flutter
 

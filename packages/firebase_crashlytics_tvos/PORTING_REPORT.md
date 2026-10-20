@@ -127,3 +127,19 @@ produced.
 **Crash-capture limits.** Per `FIRCLSFeatures.h`, tvOS captures ordinary crashes
 (signal + `NSException` handlers) but has no alternate signal stack
 (stack-overflow may be missed) and no Mach exception server.
+
+## 0.0.2: re-port to firebase_crashlytics 5.3.0
+
+5.3.0 moved the Apple plugin to Swift + Pigeon, so 0.0.1's MethodChannel
+handler was never reached (`channel-error` on every call). `Classes/` is now
+upstream 5.3.0's `ios/firebase_crashlytics/Sources/`, verbatim except:
+
+- `FirebaseCrashlyticsPlugin.swift`: imports `firebase_core_tvos`; the
+  `registrar.messenger()` branch also covers `os(tvOS)`.
+- `FirebaseCrashlyticsMessages.g.swift`: `import Flutter` also covers `os(tvOS)`.
+- Upstream's Swift and ObjC SPM targets are one pod (`DEFINES_MODULE`).
+- Podspec: `Firebase/Crashlytics ~> 12.15.0` to match `firebase_core_tvos`
+  (upstream uses 12.18.0).
+
+**Verified** on the tvOS 27.0 simulator: every API call returns, and a forced
+`crash()` is detected on relaunch. Not yet checked on a physical Apple TV.

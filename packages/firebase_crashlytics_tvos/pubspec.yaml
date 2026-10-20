@@ -2,7 +2,7 @@ name: firebase_crashlytics_tvos
 description: >-
   tvOS (Apple TV) implementation of the firebase_crashlytics Flutter plugin,
   providing Firebase Crashlytics crash reporting on Apple TV.
-version: 0.0.1
+version: 0.0.2
 homepage: https://fluttertv.dev
 repository: https://github.com/fluttertv/plugins/tree/main/packages/firebase_crashlytics_tvos
 issue_tracker: https://github.com/fluttertv/plugins/issues
@@ -16,13 +16,15 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  firebase_crashlytics: ^5.2.4
+  # tvos/Classes/*.g.swift is generated against 5.3.0.
+  firebase_crashlytics: ^5.3.0
   # Transitive Dart dependency so the app's dependency graph includes
   # firebase_core_tvos — plugin discovery (tvos_plugins.dart) only adds a
   # package's native pod to the generated Podfile if it's reachable here,
   # which the podspec's `s.dependency 'firebase_core_tvos'` then resolves
   # instead of failing over to upstream's iOS-only firebase_core pod.
-  firebase_core_tvos: ^0.0.1
+  # 0.0.3+ matches the platform interface 8.1.1 that 5.3.0 needs.
+  firebase_core_tvos: ^0.0.3
 
 dev_dependencies:
   flutter_lints: ^4.0.0
@@ -33,4 +35,4 @@ flutter:
   plugin:
     platforms:
       tvos:
-        pluginClass: FLTFirebaseCrashlyticsPlugin
+        pluginClass: FirebaseCrashlyticsPlugin
