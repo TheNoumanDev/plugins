@@ -22,6 +22,8 @@ dependencies:
     git:
       url: https://github.com/tekartik/sqflite
       path: packages_flutter/sqflite_example_common
+      # Last commit before it moved to Dart ^3.13, above CI's Flutter.
+      ref: aaabf90828645125bf7f4bd8e9a6fe4e3935b076
 dev_dependencies:
   flutter_lints: ">=5.0.0"
   flutter_test:
